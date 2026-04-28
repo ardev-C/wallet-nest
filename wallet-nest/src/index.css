@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+:root {
+  /* Minimal Semantic Core Tokens */
+  --bg-color: #f6f8fb;
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --text-color: #111827;
+  --muted-text: #4b5563;
+  --border-color: #dbe3ef;
+  --input-bg: #f8fafc;
+  --surface-soft: #f1f5f9;
+  --chat-assistant-bg: #ffffff;
+  --search-bg: #ffffff;
+  --code-bg: #f4f3ec;
+
+  /* Modular Dynamic Shadows */
+  --shadow-premium: 0 8px 30px rgba(0, 0, 0, 0.04);
+  --shadow-premium-hover: 0 20px 40px rgba(0, 0, 0, 0.08);
+
+  /* Typography Baselines */
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font-family: var(--sans);
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dark {
+  --bg-color: #020617;
+  --card-bg: rgba(11, 18, 32, 0.65);
+  --text-color: #dbe5f3;
+  --muted-text: #94a3b8;
+  --border-color: #223048;
+  --input-bg: rgba(30, 41, 59, 0.8);
+  --surface-soft: rgba(15, 23, 42, 0.75);
+  --chat-assistant-bg: rgba(30, 41, 59, 0.85);
+  --search-bg: rgba(15, 23, 42, 0.85);
+  --code-bg: #1f2028;
+  
+  --shadow-premium: 0 8px 30px rgba(255, 255, 255, 0.02);
+  --shadow-premium-hover: 0 20px 40px rgba(255, 255, 255, 0.04);
+
+  color-scheme: dark;
+}
+
+/* Application Shell Layouts */
+body {
+  margin: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Force readable form controls in light mode across pages */
+:root:not(.dark) input,
+:root:not(.dark) textarea,
+:root:not(.dark) select {
+  background-color: var(--search-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+:root:not(.dark) input::placeholder,
+:root:not(.dark) textarea::placeholder {
+  color: var(--muted-text);
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+}
+
+/* Sanitized Header Layout (Removes static overrides breaking Tailwind MT/MB utilities) */
+h1,
+h2 {
+  font-family: var(--heading);
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+}
+
+code {
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+
+/* Modular Structural Component System */
+@layer components {
+  .card-premium {
+    @apply bg-[var(--card-bg)] backdrop-blur-xl rounded-[24px] border border-[var(--border-color)] transition-all duration-300;
+    box-shadow: var(--shadow-premium);
+  }
+  .card-premium:hover {
+    @apply -translate-y-1;
+    box-shadow: var(--shadow-premium-hover);
+  }
+  .btn-primary {
+    @apply bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl py-2 px-5 shadow-[0_4px_14px_0_rgb(16,185,129,0.39)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.23)] hover:-translate-y-0.5 transition-all duration-200 font-semibold inline-flex items-center justify-center;
+  }
+  .btn-secondary {
+    @apply bg-[var(--card-bg)] border border-[var(--border-color)] dark:border-white/5 hover:border-emerald-500 dark:hover:border-emerald-500 text-[var(--text-color)] rounded-xl py-2 px-5 transition-all font-medium inline-flex items-center justify-center shadow-sm hover:shadow-md hover:-translate-y-0.5;
+  }
+}
+
+/* Global specific mobile hacks */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}

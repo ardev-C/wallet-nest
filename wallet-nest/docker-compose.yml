@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8787:8787"
+    env_file:
+      - .env.local
+    environment:
+      - PORT=8787
+      # If you want to override anything from .env.local in docker, do it here
+      - NODE_ENV=production
+    restart: unless-stopped

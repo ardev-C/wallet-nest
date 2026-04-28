@@ -1,0 +1,68 @@
+import { useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import { Eye, EyeOff } from 'lucide-react';
+
+export default function Login() {
+  const navigate = useNavigate();
+  const { login, isAuthenticated, authLoading } = useAuth();
+  const [form, setForm] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  if (isAuthenticated) return <Navigate to="/" replace />;
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    const result = await login(form);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+    navigate('/');
+  };
+
+  return (
+    <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-color)] flex items-center justify-center px-4">
+      <div className="btn-secondary">
+        <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
+        <p className="text-sm text-gray-500 mb-6">Login to continue managing your student budget.</p>
+        <form onSubmit={onSubmit} className="space-y-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
+            className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl py-3 px-4 outline-none"
+            required
+          />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              value={form.password}
+              onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
+              className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl py-3 pl-4 pr-12 outline-none"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-3 text-gray-500 hover:text-emerald-500 transition-colors"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+          {error && <p className="text-sm text-red-500">{error}</p>}
+          <button className="btn-primary w-full" disabled={authLoading}>
+            {authLoading ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+        <p className="text-sm text-gray-500 mt-4">
+          New here? <Link to="/signup" className="text-emerald-500">Create an account</Link>
+        </p>
+      </div>
+    </div>
+  );
+}
